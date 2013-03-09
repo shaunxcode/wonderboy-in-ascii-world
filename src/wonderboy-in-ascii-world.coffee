@@ -1,7 +1,14 @@
 T = require "node-term-ui"
+Dialog = require "./Dialog"
 
+_center = (max, len = 0) -> 
+	((max / 2) - (len / 2)) + 1
+	
+getCenterX = (len) -> _center T.width, len 
+getCenterY = (len) -> _center T.height, len
+	
 centerText = (y, text) -> 
-	T.pos((T.width / 2) - (text.length / 2), y).out text 
+	T.pos((getCenterX text.length), y).out(text) 
 
 Mode = 
 	titleScreen:
@@ -10,15 +17,29 @@ Mode =
 		draw: -> 
 			T.clear()
 			T.hideCursor()
-			mv = T.height / 2
+			mv = getCenterY()
 			centerText mv, "wonderboy-in-ascii-world"
 			centerText mv + 1, "press any key to start"
 
 		keypress: (char, key) -> 
-			console.log char, key 
+			transition Mode.startGame
 
-	startGame: -> 
+	startGame:
+		draw: -> 
+			T.clear()
+			
+			story = new Dialog
+				bounds:
+					w: 65
+					h: 10
+					x: getCenterX 65
+					y: getCenterY 25
+				content: [
+					"Shion has awoken once again."
+					"This time his surroundings are both familiar and yet not"]
 
+			story.draw().focus()
+			
 	globe: -> 
 
 	overworld: -> 
@@ -40,15 +61,12 @@ transition = (newMode) ->
 	mode.leave? STATE
 	mode = newMode
 	mode.enter? STATE 
-	mode.init STATE
+	mode.init? STATE
 	draw()
 
 #draw the first time and keep handle for resize
-do draw = -> 
-	mode.draw STATE
+do draw = -> mode.draw STATE
 
-T.on "keypress", (char, key) ->
-	mode.keypress? char, key
-
-T.on "resize", -> 
-	draw()
+#listen to the terminal 
+T.on "keypress", (char, key) -> mode.keypress? char, key
+T.on "resize", draw
