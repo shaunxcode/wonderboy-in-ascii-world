@@ -10,3 +10,6 @@ I am realizing I am using centering often enough that it should be in T itself.
 
 ##box scrolling bug
 apparently there is a bug in scrolling letting the scroll bar go higher than it should. 
+
+##box showing scroller un-necessarily
+allow customizing the scroll char and also do not show it unless there is actually scrollable content

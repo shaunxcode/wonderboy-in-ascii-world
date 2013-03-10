@@ -1,9 +1,7 @@
 T = require "node-term-ui"
 Dialog = require "./Dialog"
 
-_center = (max, len = 0) -> 
-	((max / 2) - (len / 2)) + 1
-	
+_center = (max, len = 0) -> ((max / 2) - (len / 2)) + 1
 getCenterX = (len) -> _center T.width, len 
 getCenterY = (len) -> _center T.height, len
 	
@@ -36,7 +34,12 @@ Mode =
 					y: getCenterY 25
 				content: [
 					"Shion has awoken once again."
-					"This time his surroundings are both familiar and yet not"]
+					"This time his surroundings are both familiar and yet not."
+					"After defeating BioMeka and the Demon King shion finds himself"
+					"washed up on the shore of a strange island made of text."
+					""
+					"Equipped with nothing but a sword and and old pair of sneakers"
+					"your adventure begins!"]
 
 			story.draw().focus()
 			
