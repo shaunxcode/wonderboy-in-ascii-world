@@ -4,9 +4,23 @@ Dialog = require "./Dialog"
 _center = (max, len = 0) -> ((max / 2) - (len / 2)) + 1
 getCenterX = (len) -> _center T.width, len 
 getCenterY = (len) -> _center T.height, len
-	
+
+_portion = (max, per) -> Math.floor max * per
+getPortionH = (per) -> _portion T.height, per
+getPortionW = (per) -> _portion T.width, per
+
 centerText = (y, text) -> 
 	T.pos((getCenterX text.length), y).out(text) 
+
+dialogs = require "./dialogs"
+
+screen = new T.Box bounds: x: 2, y: 2
+info =  new T.Box bounds: x: 2
+dialog = new Dialog 
+
+confirm = (statement, options) ->
+	dialog.setBounds(w: 65, h: 10).setContent statement.split "\n"
+	dialog.setOptions options
 
 Mode = 
 	titleScreen:
@@ -23,26 +37,18 @@ Mode =
 			transition Mode.startGame
 
 	startGame:
+		init: ->
+			confirm dialogs.start, [
+				["egress", "Egress to Reality", -> T.quit()]
+				["embark", "Embark Upon Adventure", -> T.pos(1, 5).out "TALK TALK"]]
+
 		draw: -> 
 			T.clear()
-			
-			story = new Dialog
-				bounds:
-					w: 65
-					h: 10
-					x: getCenterX 65
-					y: getCenterY 25
-				content: [
-					"Shion has awoken once again."
-					"This time his surroundings are both familiar and yet not."
-					"After defeating BioMeka and the Demon King shion finds himself"
-					"washed up on the shore of a strange island made of text."
-					""
-					"Equipped with nothing but a sword and and old pair of sneakers"
-					"your adventure begins!"]
+			screen.setBounds(x: 2, y: 2, h: getPortionH(.75), w: T.width - 2)
+			info.setBounds(x:2, y: screen.bounds.h + 2, h: getPortionH(.25), w: T.width - 2)
+			dialog.setBounds(x: getCenterX(65), y: getCenterY(25))
 
-			story.draw().focus()
-			
+
 	globe: -> 
 
 	overworld: -> 
