@@ -4,13 +4,13 @@ class Dialog extends T.Box
 	constructor: (opts) -> 
 		super opts
 		@botRightCorner = @botLeftCorner = @topRightCorner = @topLeftCorner = T.B 3, 3, 3, 3
-		@_optionBoxes = []
-
+		
+		@tabs = new T.Tabs
+			position: "bottom"
+			
 	draw: -> 
 		super()
-		@rightX = @bounds.x + @bounds.w - 1
-		@botY = @bounds.y + @bounds.h - 1
-		
+
 		@drawOptions()
 		this
 		
@@ -48,46 +48,20 @@ class Dialog extends T.Box
 		T.restoreFg()
   
 	setOptions: (options) ->
-		box.destroy() for box in @_optionBoxes 
-		
 		@dialogOptions = options
-		@_optionBoxes = []
+		@tabs.setItems options
+	
+	drawOptions: -> 
+		@tabs.x = @bounds.x + @bounds.w - @tabs.width - 2
+		@tabs.y = @bounds.y + @bounds.h - 1
+		T._d @bounds
+		@tabs.draw()
 
-		for option, handler of @dialogOptions
-			@_optionBoxes.push box = new T.Box
-				ellipsizeContent: false
-				bounds:
-					w: "fit"
-					h: "fit"
-				borders:
-					t: false
-				content: [option]
-
-			box.onKey_space = handler
-		box.focus()
-		
-		@drawOptions()
-		
-	drawOptions: ->
-		curX = @rightX - 2
-		for option in @_optionBoxes
-			curX -= option.bounds.w
-			option.setBounds(x: curX, y: @botY)
-			T.pos(curX, @botY).out T.B 1, 1, 0, 1
-			T.pos(curX + option.bounds.w - 1, @botY).out T.B 1, 1, 0, 1
-		this
-		
 	focus: -> 
 		super()
 		@drawOptions()
-		this
-	
-	
-	blur: ->
-		super() 
+		
+	blur: -> 
+		super()
 		@drawOptions()
-		this
-
-		
-		
 module.exports = Dialog
