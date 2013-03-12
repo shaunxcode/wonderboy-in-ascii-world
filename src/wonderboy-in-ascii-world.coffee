@@ -51,8 +51,8 @@ Mode =
 		draw: -> 
 			T.clear()
 			screen.setBounds(x: 2, y: 2, h: getPortionH(.75), w: T.width - 2)
-			info.setBounds(x:2, y: screen.bounds.h + 2, h: getPortionH(.25), w: T.width - 2)
-			dialog.setBounds(x: getCenterX(65), y: getCenterY(25))
+			info.setBounds(x:2, y: screen.bounds.h + 2, h: getPortionH(.24), w: T.width - 2)
+			dialog.setBounds(x: getCenterX(65), y: getCenterY(11))
 
 		leave: ->
 			T.clear()
