@@ -8,6 +8,9 @@ class Dialog extends T.Box
 		@tabs = new T.Tabs
 			position: "bottom"
 			
+		@tabs.on "activeTab", (option) => 
+			@dialogOptionHandlers[option]?()
+
 	draw: -> 
 		super()
 
@@ -47,10 +50,14 @@ class Dialog extends T.Box
 
 		T.restoreFg()
   
-	setOptions: (options) ->
+	setOptions: (options) -> 
 		@dialogOptions = options
+		@dialogOptionHandlers = {}
+		for option in options
+			@dialogOptionHandlers[option[0]] = option[2]
+			
 		@tabs.setItems options
-	
+
 	drawOptions: -> 
 		@tabs.x = @bounds.x + @bounds.w - @tabs.width - 2
 		@tabs.y = @bounds.y + @bounds.h - 1
@@ -64,4 +71,10 @@ class Dialog extends T.Box
 	blur: -> 
 		super()
 		@drawOptions()
+		
+	hide: -> 
+		super()
+		@tabs.hide()
+		this
+		
 module.exports = Dialog

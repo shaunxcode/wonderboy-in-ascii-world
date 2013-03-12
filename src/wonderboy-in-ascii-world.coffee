@@ -18,9 +18,15 @@ screen = new T.Box bounds: x: 2, y: 2
 info =  new T.Box bounds: x: 2
 dialog = new Dialog 
 
+writeJournal = (entry) -> 
+	for line in entry.split "\n"
+		info.content.push line
+	info.draw()
+	
 confirm = (statement, options) ->
 	dialog.setBounds(w: 65, h: 10).setContent statement.split "\n"
 	dialog.setOptions options
+	dialog.show()
 
 Mode = 
 	titleScreen:
@@ -40,7 +46,7 @@ Mode =
 		init: ->
 			confirm dialogs.start, [
 				["egress", "Egress to Reality", -> T.quit()]
-				["embark", "Embark Upon Adventure", -> T.pos(1, 5).out "TALK TALK"]]
+				["embark", "Embark Upon Adventure", -> transition Mode.newGame]]
 
 		draw: -> 
 			T.clear()
@@ -48,7 +54,19 @@ Mode =
 			info.setBounds(x:2, y: screen.bounds.h + 2, h: getPortionH(.25), w: T.width - 2)
 			dialog.setBounds(x: getCenterX(65), y: getCenterY(25))
 
+		leave: ->
+			T.clear()
+			dialog.hide()
+			screen.draw()
+			info.draw()
 
+	newGame:
+		init: ->
+			writeJournal "Shion has chosen to face the new world despite the harsh reality."
+			
+		draw: -> 
+			T._d "DRAW NEW GAME STATE"
+			
 	globe: -> 
 
 	overworld: -> 
