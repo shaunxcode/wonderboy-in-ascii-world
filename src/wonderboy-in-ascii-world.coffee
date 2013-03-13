@@ -27,7 +27,8 @@ confirm = (statement, options) ->
 	dialog.setBounds(w: 65, h: 10).setContent statement.split "\n"
 	dialog.setOptions options
 	dialog.show()
-
+	dialog.focus()
+	
 Mode = 
 	titleScreen:
 		init: ->
@@ -63,6 +64,7 @@ Mode =
 	newGame:
 		init: ->
 			writeJournal "Shion has chosen to face the new world despite the harsh reality."
+			screen.focus()
 			
 		draw: -> 
 			T._d "DRAW NEW GAME STATE"
